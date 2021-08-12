@@ -56,7 +56,7 @@ jobs:
       with:
         java-version: 1.11
     - name: Maven Package
-      run: mvn -B clean package -DskipTests
+      run: mvn -B package --file pom.xml -Dmaven.test.skip=true
     - name: Maven Verify
       run: mvn -B clean verify
 
