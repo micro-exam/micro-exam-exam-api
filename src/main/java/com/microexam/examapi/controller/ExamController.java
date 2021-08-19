@@ -17,23 +17,24 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/exams")
 public class ExamController {
     @Autowired
     private ExamRepository examRepository;
 
-    @GetMapping("/exams")
+    @GetMapping()
     public List<Exam> findExams(){
         return examRepository.findAll();
     }
 
-    @GetMapping("/exams/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<?> findExam(@PathVariable Long id){
         return examRepository.findById(id).map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
         }
 
 
-    @PostMapping(path = "exams",
+    @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createExam(@RequestBody Exam newExam) {
@@ -41,7 +42,7 @@ public class ExamController {
         return new ResponseEntity<>(exam, HttpStatus.CREATED);
     }
 
-   @DeleteMapping("/exams/delete/{id}")
+   @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteExam(@PathVariable Long id) {
        Optional<Exam> exam = examRepository.findById(id);
        if (exam.isPresent()) {
