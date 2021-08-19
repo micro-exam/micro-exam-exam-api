@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
+import javax.ws.rs.core.Response;
 import java.rmi.ServerException;
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +41,16 @@ public class ExamController {
         return new ResponseEntity<>(exam, HttpStatus.CREATED);
     }
 
+   @DeleteMapping("/exams/delete/{id}")
+    public ResponseEntity<?> deleteExam(@PathVariable Long id) {
+       Optional<Exam> exam = examRepository.findById(id);
+       if (exam.isPresent()) {
+           examRepository.delete(exam.get());
+           return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+       } else {
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+       }
+   }
 }
 
 
