@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
@@ -26,7 +27,7 @@ public class Exam {
     private String language;
 
     @CreationTimestamp
-    private Date timestamp;
+    private Timestamp timestamp;
 
 
 

@@ -1,5 +1,6 @@
 package com.microexam.examapi.controller;
 
+import com.microexam.examapi.dto.ExamDTO;
 import com.microexam.examapi.model.Exam;
 import com.microexam.examapi.repository.ExamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,15 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
+import javax.ws.rs.PATCH;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import java.rmi.ServerException;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +60,23 @@ public class ExamController {
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
        }
    }
+
+   @PutMapping("/{id}")
+    public ResponseEntity<?> updateExam(@RequestBody ExamDTO examDTO, @PathVariable Long id){
+       Optional<Exam> exam = examRepository.findById(id);
+       if(exam.isEmpty()) {
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+       }
+       else {
+           exam.get().setExamName(examDTO.getExamName());
+           exam.get().setExamDescription(examDTO.getExamDescription());
+           exam.get().setLanguage(examDTO.getLanguage());
+           exam.get().setTimestamp(Timestamp.from(Instant.now()));
+       }
+       final Exam updatedExam = examRepository.save(exam.get());
+       return ResponseEntity.ok(updatedExam);
+   }
+
 }
 
 
