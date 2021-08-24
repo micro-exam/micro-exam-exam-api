@@ -4,23 +4,13 @@ import com.microexam.examapi.dto.ExamDTO;
 import com.microexam.examapi.model.Exam;
 import com.microexam.examapi.repository.ExamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JsonParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
-import javax.ws.rs.PATCH;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
-import java.rmi.ServerException;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Optional;
 
