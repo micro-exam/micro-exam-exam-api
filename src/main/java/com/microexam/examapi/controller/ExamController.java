@@ -1,6 +1,7 @@
 package com.microexam.examapi.controller;
 
 import com.microexam.examapi.dto.ExamDTO;
+import com.microexam.examapi.exeception.ExamNotFoundException;
 import com.microexam.examapi.model.Exam;
 import com.microexam.examapi.repository.ExamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class ExamController {
     @GetMapping("{id}")
     public ResponseEntity<?> findExam(@PathVariable Long id){
         return examRepository.findById(id).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+                .orElseThrow(() -> new ExamNotFoundException(id));
         }
 
 
