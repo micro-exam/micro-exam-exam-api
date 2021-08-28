@@ -4,6 +4,7 @@ import com.microexam.examapi.dto.ExamDTO;
 import com.microexam.examapi.exeception.ExamNotFoundException;
 import com.microexam.examapi.model.Exam;
 import com.microexam.examapi.repository.ExamRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,7 +44,8 @@ public class ExamController {
 
    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteExam(@PathVariable Long id) {
-       Optional<Exam> exam = examRepository.findById(id);
+       Optional<Exam> exam = Optional.ofNullable(examRepository.findById(id).orElseThrow(() -> new ExamNotFoundException(id)));
+
        if (exam.isPresent()) {
            examRepository.delete(exam.get());
            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -54,14 +56,12 @@ public class ExamController {
 
    @PutMapping("/{id}")
     public ResponseEntity<?> updateExam(@RequestBody ExamDTO examDTO, @PathVariable Long id){
-       Optional<Exam> exam = examRepository.findById(id);
+       Optional<Exam> exam = Optional.ofNullable(examRepository.findById(id).orElseThrow(() -> new ExamNotFoundException(id)));
        if(exam.isEmpty()) {
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
        }
        else {
-           exam.get().setExamName(examDTO.getExamName());
-           exam.get().setExamDescription(examDTO.getExamDescription());
-           exam.get().setLanguage(examDTO.getLanguage());
+           BeanUtils.copyProperties(examDTO, exam.get());
            exam.get().setTimestamp(Timestamp.from(Instant.now()));
        }
        final Exam updatedExam = examRepository.save(exam.get());
