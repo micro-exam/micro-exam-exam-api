@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 @Table(name="exams")
 @Entity
 @Builder
+@ToString
 public class Exam {
 
     @Id
