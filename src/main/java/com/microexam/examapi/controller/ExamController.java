@@ -4,6 +4,7 @@ import com.microexam.examapi.dto.ExamDTO;
 import com.microexam.examapi.exeception.ExamNotFoundException;
 import com.microexam.examapi.model.Exam;
 import com.microexam.examapi.repository.ExamRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/exams")
+@Slf4j
 public class ExamController {
     @Autowired
     private ExamRepository examRepository;
@@ -39,6 +41,7 @@ public class ExamController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createExam(@RequestBody Exam newExam) {
         Exam exam = examRepository.save(newExam);
+        log.info("Exam to post: {}", exam.toString());
         return new ResponseEntity<>(exam, HttpStatus.CREATED);
     }
 
@@ -48,8 +51,10 @@ public class ExamController {
 
        if (exam.isPresent()) {
            examRepository.delete(exam.get());
+           log.info("Exam that was deleted {}", exam.toString());
            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
        } else {
+           log.error("Exam was not found with exam id of {}", id);
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
        }
    }
