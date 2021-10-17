@@ -41,7 +41,6 @@ public class ExamController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createExam(@RequestBody Exam newExam) {
         Exam exam = examRepository.save(newExam);
-        log.info("Exam to post: {}", exam.toString());
         return new ResponseEntity<>(exam, HttpStatus.CREATED);
     }
 
